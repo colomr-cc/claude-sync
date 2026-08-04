@@ -67,3 +67,22 @@ indistinguible de "el hook no llegó a ejecutarse":
 
 CI en GitHub Actions (obligatorio vía branch protection) + SonarCloud Automatic
 Analysis. El mismo estándar que cualquier otro repo: nada llega a main sin verde.
+
+### Dónde vive la configuración de Sonar
+
+En la **UI de SonarCloud, dentro del proyecto** (`Administration → …`), no en el repo:
+el Automatic Analysis **ignora los ficheros `sonar-project.properties`** — esos solo
+los lee el scanner cuando el análisis corre desde el CI. Comprobado en la práctica:
+con el fichero presente, los avisos seguían apareciendo.
+
+Ajustes actuales, todos a nivel de proyecto (no heredados de la organización):
+
+| Ajuste | Valor | Dónde en la UI |
+|---|---|---|
+| `sonar.python.version` | `3.12` | General Settings → Languages → Python |
+| `sonar.test.inclusions` | `tests/**` | Analysis Scope → **Test** File Inclusions |
+
+⚠️ Cuidado con el alcance: `sonar.inclusions` (Source File Inclusions) significa
+"analiza **solo** esto" — poner ahí `tests/**` deja fuera todo el código de producción
+y el gate se queda ciego en verde. El campo correcto para marcar tests es
+`sonar.test.inclusions`.
