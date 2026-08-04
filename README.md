@@ -52,9 +52,16 @@ Nunca a mano en main. Flujo E2E estándar:
 
 ### Diagnóstico
 
-Si el sync tiene un problema (repo sucio, sin red, rama a medias, JSON roto), lo
-verás como aviso `⚠️ claude-config: ...` al inicio de la sesión de Claude Code.
-Un arranque sin aviso = sincronizado y en la última política aprobada.
+El sync **siempre habla** al inicio de la sesión de Claude Code — el silencio sería
+indistinguible de "el hook no llegó a ejecutarse":
+
+- **Éxito:** `✅ claude-config sincronizado · contrato en vigor: <commit> (<fecha>)`.
+  El commit identifica qué versión del contrato rige en esa máquina: útil para ver
+  de un vistazo si un equipo se quedó atrás.
+- **Problema:** `⚠️ claude-config: ...` con la causa (repo sucio, rama a medias, sin
+  red, JSON roto). El sync no rompe el arranque de la sesión: informa y sigue con la
+  última configuración local válida.
+- **Ningún mensaje:** el hook no se ejecutó → revisar la instalación en esa máquina.
 
 ## Quality Gate
 
