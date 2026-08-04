@@ -15,7 +15,7 @@ las dos capas: el contrato como tinta versionada, los hooks y el CI como cemento
 | `CLAUDE.md` | El contrato de trabajo (cómo trabajo, autoría, git, comunicación) | Claude Code al arrancar cada sesión, vía symlink `~/.claude/CLAUDE.md` | Solo yo, vía PR |
 | `settings.shared.json` | Política compartida: atribución vacía + hook de sync. **Nunca** contiene estado por máquina (`model`, `effortLevel`) — el CI lo impide | `merge_settings.py` | Solo yo, vía PR |
 | `sync.sh` | Orquestador: corre en cada arranque de sesión (hook `SessionStart`). Hace `git pull` de este repo y re-fusiona la política en el settings local. Todo fallo se comunica en voz alta dentro de la sesión — nunca muere en silencio | El hook de SessionStart | Solo yo, vía PR |
-| `merge_settings.py` | La lógica de fusión: el repo GANA en las claves que gestiona, lo local no gestionado se conserva. Fusión superficial a propósito | `sync.sh` e `install.sh` | Solo yo, vía PR |
+| `merge_settings.py` | La lógica de fusión: el repo GANA en las claves que gestiona, lo local no gestionado se conserva. Fusión superficial a propósito. Rutas fijas (no acepta argumentos): nadie puede apuntarlo a otros ficheros | `sync.sh` e `install.sh` | Solo yo, vía PR |
 | `install.sh` | Bootstrap de máquina: symlink del contrato + primera fusión (que además registra el hook). Idempotente | Yo, una vez por equipo | Solo yo, vía PR |
 | `tests/` | UT de la fusión (la única lógica real del repo) | CI y pre-PR | Junto al código que tocan |
 
