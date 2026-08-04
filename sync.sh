@@ -5,12 +5,18 @@ set -uo pipefail
 
 DIR="$(cd "$(dirname "$0")" && pwd)"
 
-# Emite el aviso en el formato que el hook inyecta en la sesión.
+# Emite un mensaje en el formato que el hook inyecta en la sesión.
 # Solo informa: quien llama decide terminar (siempre con éxito, para no
 # romper el arranque de la sesión por un problema de sincronización).
-warn() {
+# El sync SIEMPRE habla: silencio sería indistinguible de "el hook no corrió".
+say() {
   local msg="$1"
-  printf '{"hookSpecificOutput":{"hookEventName":"SessionStart","additionalContext":"⚠️ claude-config: %s"}}\n' "$msg"
+  printf '{"hookSpecificOutput":{"hookEventName":"SessionStart","additionalContext":"%s"}}\n' "$msg"
+  return 0
+}
+
+warn() {
+  say "⚠️ claude-config: $1"
   return 0
 }
 
@@ -38,4 +44,7 @@ if ! python3 "$DIR/merge_settings.py"; then
   exit 0
 fi
 
+# 4. Confirmar en voz alta qué contrato rige en esta máquina
+CONTRATO="$(git log -1 --format='%h (%ad)' --date=short -- CLAUDE.md settings.shared.json)"
+say "✅ claude-config sincronizado · contrato en vigor: ${CONTRATO}"
 exit 0
