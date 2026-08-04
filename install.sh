@@ -10,7 +10,7 @@ mkdir -p "$HOME/.claude"
 ln -sf "$DIR/CLAUDE.md" "$HOME/.claude/CLAUDE.md"
 
 # Política: primera fusión + registro del hook de SessionStart (viene en settings.shared.json)
-python3 "$DIR/merge_settings.py" "$DIR/settings.shared.json" "$HOME/.claude/settings.json"
+python3 "$DIR/merge_settings.py"
 
 chmod +x "$DIR/sync.sh"
 echo "OK — contrato enlazado y política sincronizada desde $DIR"

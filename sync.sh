@@ -4,31 +4,38 @@
 set -uo pipefail
 
 DIR="$(cd "$(dirname "$0")" && pwd)"
-SETTINGS="$HOME/.claude/settings.json"
 
+# Emite el aviso en el formato que el hook inyecta en la sesión.
+# Solo informa: quien llama decide terminar (siempre con éxito, para no
+# romper el arranque de la sesión por un problema de sincronización).
 warn() {
-  printf '{"hookSpecificOutput":{"hookEventName":"SessionStart","additionalContext":"⚠️ claude-config: %s"}}\n' "$1"
-  exit 0
+  local msg="$1"
+  printf '{"hookSpecificOutput":{"hookEventName":"SessionStart","additionalContext":"⚠️ claude-config: %s"}}\n' "$msg"
+  return 0
 }
 
 # 1. El repo debe estar limpio y en main — si no, algo se hizo fuera del flujo
-cd "$DIR" || warn "no existe $DIR"
-if [ -n "$(git status --porcelain)" ]; then
+cd "$DIR" || { warn "no existe $DIR"; exit 0; }
+if [[ -n "$(git status --porcelain)" ]]; then
   warn "repo SUCIO (cambios sin commitear) — el sync no actúa hasta resolverlo"
+  exit 0
 fi
 BRANCH="$(git branch --show-current)"
-if [ "$BRANCH" != "main" ]; then
+if [[ "$BRANCH" != "main" ]]; then
   warn "repo fuera de main (rama $BRANCH) — ¿PR a medias?"
+  exit 0
 fi
 
 # 2. Traer la última política aprobada (sin red → seguimos con la local, avisando)
 if ! git pull --ff-only -q 2>/dev/null; then
   warn "pull fallido (¿sin red?) — usando la última versión local"
+  exit 0
 fi
 
 # 3. Fusionar política compartida → settings local (repo gana SOLO en sus claves)
-if ! python3 "$DIR/merge_settings.py" "$DIR/settings.shared.json" "$SETTINGS"; then
+if ! python3 "$DIR/merge_settings.py"; then
   warn "fusión de settings fallida — revisar JSON"
+  exit 0
 fi
 
 exit 0

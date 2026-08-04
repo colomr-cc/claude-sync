@@ -6,9 +6,14 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from merge_settings import load_local, main, merge
+from merge_settings import load_local, merge, sync
 
 SHARED = {"attribution": {"commit": "", "pr": ""}, "hooks": {"SessionStart": []}}
+
+
+def _escribir(path: Path, data: dict) -> Path:
+    path.write_text(json.dumps(data), encoding="utf-8")
+    return path
 
 
 def test_merge_el_repo_gana_en_sus_claves():
@@ -35,25 +40,29 @@ def test_load_local_corrupto_devuelve_vacio(tmp_path):
     assert load_local(roto) == {}
 
 
-def test_main_escribe_el_resultado_fusionado(tmp_path):
-    shared_f = tmp_path / "shared.json"
-    local_f = tmp_path / "settings.json"
-    shared_f.write_text(json.dumps(SHARED), encoding="utf-8")
-    local_f.write_text(json.dumps({"model": "claude-sonnet-5"}), encoding="utf-8")
+def test_sync_escribe_el_resultado_fusionado(tmp_path):
+    shared_f = _escribir(tmp_path / "shared.json", SHARED)
+    local_f = _escribir(tmp_path / "settings.json", {"model": "claude-sonnet-5"})
 
-    assert main(str(shared_f), str(local_f)) == 0
+    assert sync(shared_f, local_f) is True
 
     resultado = json.loads(local_f.read_text(encoding="utf-8"))
     assert resultado["model"] == "claude-sonnet-5"
     assert resultado["attribution"] == {"commit": "", "pr": ""}
 
 
-def test_main_no_reescribe_si_no_hay_cambios(tmp_path):
-    shared_f = tmp_path / "shared.json"
-    local_f = tmp_path / "settings.json"
-    shared_f.write_text(json.dumps(SHARED), encoding="utf-8")
-    local_f.write_text(json.dumps({"model": "x"} | SHARED), encoding="utf-8")
+def test_sync_no_reescribe_si_no_hay_cambios(tmp_path):
+    shared_f = _escribir(tmp_path / "shared.json", SHARED)
+    local_f = _escribir(tmp_path / "settings.json", {"model": "x"} | SHARED)
 
     antes = local_f.stat().st_mtime_ns
-    main(str(shared_f), str(local_f))
+    assert sync(shared_f, local_f) is False
     assert local_f.stat().st_mtime_ns == antes
+
+
+def test_sync_crea_el_settings_si_no_existe(tmp_path):
+    shared_f = _escribir(tmp_path / "shared.json", SHARED)
+    local_f = tmp_path / "nuevo" / "settings.json"
+
+    assert sync(shared_f, local_f) is True
+    assert json.loads(local_f.read_text(encoding="utf-8")) == SHARED
