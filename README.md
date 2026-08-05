@@ -52,8 +52,9 @@ Nunca a mano en main. Flujo E2E estándar:
 
 ### Diagnóstico
 
-El sync **siempre habla** al inicio de la sesión de Claude Code — el silencio sería
-indistinguible de "el hook no llegó a ejecutarse":
+El sync **siempre habla**, y por los dos canales del protocolo de hooks: `systemMessage`
+(visible en pantalla para mí) y `additionalContext` (visible para el modelo). El silencio
+sería indistinguible de "el hook no llegó a ejecutarse":
 
 - **Éxito:** `✅ claude-config sincronizado · contrato en vigor: <commit> (<fecha>)`.
   El commit identifica qué versión del contrato rige en esa máquina: útil para ver
