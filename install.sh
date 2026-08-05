@@ -1,17 +1,17 @@
 #!/usr/bin/env bash
 # Bootstrap de máquina nueva (o re-instalación). Ejecutar UNA vez por equipo.
-# Regla: ante conflicto, el repo GANA en lo que gestiona; lo local no gestionado se conserva.
+# A partir de ahí, sync.sh mantiene la máquina al día en cada arranque de sesión.
 set -euo pipefail
 
 DIR="$(cd "$(dirname "$0")" && pwd)"
 mkdir -p "$HOME/.claude"
 
-# Contrato: symlink — una sola fuente de verdad, actualizada vía git
-ln -sf "$DIR/CLAUDE.md" "$HOME/.claude/CLAUDE.md"
-
-# Política: primera fusión + registro del hook de SessionStart (viene en settings.shared.json)
-python3 "$DIR/merge_settings.py"
-
 chmod +x "$DIR/sync.sh"
-echo "OK — contrato enlazado y política sincronizada desde $DIR"
+
+# El propio sync hace todo el trabajo: trae origin/main, materializa el contrato
+# aprobado y aplica la política (que incluye el hook de SessionStart).
+"$DIR/sync.sh" > /dev/null
+
+echo "OK — configuración aprobada aplicada desde $DIR"
+echo "Contrato: $HOME/.claude/CLAUDE.md (copia gestionada; se edita por PR, no a mano)"
 echo "La próxima sesión de Claude Code ya arranca con el contrato y el sync automático."
