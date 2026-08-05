@@ -5,13 +5,16 @@ set -uo pipefail
 
 DIR="$(cd "$(dirname "$0")" && pwd)"
 
-# Emite un mensaje en el formato que el hook inyecta en la sesión.
+# Emite un mensaje por los DOS canales del protocolo de hooks:
+#   - systemMessage      → se muestra en pantalla al usuario
+#   - additionalContext  → entra en el contexto del modelo
+# Ambos son necesarios: uno solo dejaría a ciegas a una de las dos partes.
 # Solo informa: quien llama decide terminar (siempre con éxito, para no
 # romper el arranque de la sesión por un problema de sincronización).
 # El sync SIEMPRE habla: silencio sería indistinguible de "el hook no corrió".
 say() {
   local msg="$1"
-  printf '{"hookSpecificOutput":{"hookEventName":"SessionStart","additionalContext":"%s"}}\n' "$msg"
+  printf '{"systemMessage":"%s","hookSpecificOutput":{"hookEventName":"SessionStart","additionalContext":"%s"}}\n' "$msg" "$msg"
   return 0
 }
 
