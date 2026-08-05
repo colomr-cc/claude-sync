@@ -62,9 +62,12 @@ Nunca a mano en main. Flujo E2E estándar:
 
 ### Diagnóstico
 
-El sync **siempre habla**, y por los dos canales del protocolo de hooks: `systemMessage`
-(visible en pantalla para mí) y `additionalContext` (visible para el modelo). El silencio
-sería indistinguible de "el hook no llegó a ejecutarse":
+El sync **siempre habla**. Detalle importante del harness: el evento `SessionStart` solo
+honra `additionalContext`, que va al contexto del modelo y **no se muestra en pantalla**
+(se emite también `systemMessage`, pero este evento lo ignora). Por eso la regla 11 del
+contrato obliga a Claude a reproducir esa línea al inicio de su primera respuesta: es la
+única forma de que el estado llegue a mis ojos. El silencio sería indistinguible de "el
+hook no llegó a ejecutarse":
 
 - **Éxito:** `✅ claude-config · contrato en vigor: <commit> (<fecha>)`. El commit
   identifica qué versión rige en esa máquina: útil al volver a un equipo que llevaba
