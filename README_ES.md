@@ -1,4 +1,4 @@
-# claude-config
+# claude-sync
 
 Configuración global de Claude Code para todos mis equipos: el **contrato de trabajo**
 que toda sesión de IA debe cumplir, la **política compartida** y el **orquestador**
@@ -41,15 +41,15 @@ gana en las claves que gestiona y el estado por máquina no viaja jamás entre e
 ### Máquina nueva (o existente — el repo gana en lo que gestiona)
 
 ```bash
-git clone git@github.com:colomr-cc/claude-config.git ~/dev/claude-config
-~/dev/claude-config/install.sh
+git clone git@github.com:colomr-cc/claude-sync.git ~/dev/claude-sync
+~/dev/claude-sync/install.sh
 ```
 
 Listo. La siguiente sesión de Claude Code en esa máquina ya arranca con el contrato
 cargado y el sync automático activo. Si había un `~/.claude/CLAUDE.md` previo,
 se sustituye por la copia aprobada; las claves locales no gestionadas de `settings.json` se conservan.
 
-**Requisito:** la ruta debe ser `~/dev/claude-config` (el hook la referencia).
+**Requisito:** la ruta debe ser `~/dev/claude-sync` (el hook la referencia).
 
 ### Actualizar el contrato o la política
 
@@ -68,13 +68,13 @@ contrato obliga a Claude a reproducir esa línea al inicio de su primera respues
 única forma de que el estado llegue a mis ojos. El silencio sería indistinguible de "el
 hook no llegó a ejecutarse":
 
-- **Éxito:** `✅ claude-config · contrato en vigor: <commit> (<fecha>)`. El commit
+- **Éxito:** `✅ claude-sync · contrato en vigor: <commit> (<fecha>)`. El commit
   identifica qué versión rige en esa máquina: útil al volver a un equipo que llevaba
   tiempo sin usarse.
 - **Contrato actualizado:** el mensaje lo añade explícitamente, con el comando para ver
-  el diff — `git -C ~/dev/claude-config log -p -1 origin/main -- CLAUDE.md`. Ningún
+  el diff — `git -C ~/dev/claude-sync log -p -1 origin/main -- CLAUDE.md`. Ningún
   cambio del contrato se aplica en silencio.
-- **Problema:** `⚠️ claude-config: ...` con la causa (sin acceso a `origin`, referencia
+- **Problema:** `⚠️ claude-sync: ...` con la causa (sin acceso a `origin`, referencia
   inexistente, política ilegible). El sync no rompe el arranque de la sesión: informa y
   sigue con la última configuración válida.
 - **Ningún mensaje:** el hook no se ejecutó → revisar la instalación en esa máquina.
