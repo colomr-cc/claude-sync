@@ -2,9 +2,9 @@
 
 > **Spanish version:** [README_ES.md](README_ES.md)
 
-Multi-Device Claude Code synchronizer: the **work contract**
-that every AI session must follow, the **shared policy**, and the **orchestrator**
-that keeps all machines synchronized.
+## Multi-Device Claude Code Synchronizer
+
+The **work contract** that every AI session must follow, the **shared policy**, and the **orchestrator** that keeps all machines synchronized.
 
 **Design principle:** instructions are ink (the model follows them probabilistically);
 gates are cement (the program enforces them). This repo provides both layers:

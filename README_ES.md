@@ -1,8 +1,10 @@
 # claude-sync
 
-Configuración global de Claude Code para todos mis equipos: el **contrato de trabajo**
-que toda sesión de IA debe cumplir, la **política compartida** y el **orquestador**
-que mantiene las tres máquinas sincronizadas.
+> **English version:** [README.md](README.md)
+
+## Sincronizador Multi-Dispositivo de Claude Code
+
+El **contrato de trabajo** que toda sesión de IA debe cumplir, la **política compartida** y el **orquestador** que mantiene todos los equipos sincronizados.
 
 **Principio de diseño:** las instrucciones son tinta (el modelo las sigue de forma
 probabilística); los gates son cemento (los ejecuta el programa). Este repo aporta
