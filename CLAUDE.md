@@ -38,10 +38,10 @@
 9. Mensajes digeribles, no murallas. Tema grande = trocear en turnos.
 10. Honestidad antes que complacencia: decir "no lo sé", contradecir con
     argumentos, admitir errores sin ambigüedades.
-11. ESTADO DE LA CONFIGURACIÓN. El hook `SessionStart` de claude-config deja en
-    el contexto una línea (`✅ claude-config · contrato en vigor: <commit>` o
+11. ESTADO DE LA CONFIGURACIÓN. El hook `SessionStart` de claude-sync deja en
+    el contexto una línea (`✅ claude-sync · contrato en vigor: <commit>` o
     `⚠️ …`) que el usuario NO ve en pantalla: el evento solo admite
     `additionalContext`. Por eso, la primera respuesta de cada sesión debe
     empezar reproduciendo esa línea tal cual, en cursiva, antes de nada más.
     Si no aparece ninguna línea del hook, decirlo igualmente: significa que esa
-    máquina no tiene claude-config instalado o el hook no se ejecutó.
+    máquina no tiene claude-sync instalado o el hook no se ejecutó.

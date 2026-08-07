@@ -18,7 +18,7 @@ say() {
   return 0
 }
 
-cd "$DIR" || { say "⚠️ claude-config: no existe $DIR — revisar la instalación"; exit 0; }
+cd "$DIR" || { say "⚠️ claude-sync: no existe $DIR — revisar la instalación"; exit 0; }
 
 # 1. Traer la referencia aprobada. Sin red se sigue con la última conocida.
 NOTA=""
@@ -30,7 +30,7 @@ else
 fi
 
 if ! git rev-parse --verify --quiet "$REF" >/dev/null; then
-  say "⚠️ claude-config: no existe la referencia $REF — revisar la instalación"
+  say "⚠️ claude-sync: no existe la referencia $REF — revisar la instalación"
   exit 0
 fi
 
@@ -43,7 +43,7 @@ APROBADO="$(git rev-parse "$REF:CLAUDE.md" 2>/dev/null)"
 
 CAMBIO=""
 if [[ -z "$APROBADO" ]]; then
-  say "⚠️ claude-config: no se encuentra CLAUDE.md en $REF"
+  say "⚠️ claude-sync: no se encuentra CLAUDE.md en $REF"
   exit 0
 fi
 if [[ "$ACTUAL" != "$APROBADO" ]]; then
@@ -51,7 +51,7 @@ if [[ "$ACTUAL" != "$APROBADO" ]]; then
   TMP="$(mktemp)"
   if ! git show "$REF:CLAUDE.md" > "$TMP"; then
     rm -f "$TMP"
-    say "⚠️ claude-config: no se pudo extraer el contrato de $REF"
+    say "⚠️ claude-sync: no se pudo extraer el contrato de $REF"
     exit 0
   fi
   mv -f "$TMP" "$CONTRATO"
@@ -60,11 +60,11 @@ fi
 
 # 3. Aplicar la política aprobada al settings local
 if ! python3 "$DIR/merge_settings.py"; then
-  say "⚠️ claude-config: no se pudo aplicar la política — revisar settings.shared.json"
+  say "⚠️ claude-sync: no se pudo aplicar la política — revisar settings.shared.json"
   exit 0
 fi
 
 # 4. Confirmar en voz alta qué contrato rige en esta máquina
 VIGENTE="$(git log -1 --format='%h (%ad)' --date=short "$REF" -- CLAUDE.md settings.shared.json)"
-say "✅ claude-config · contrato en vigor: ${VIGENTE}${CAMBIO}${NOTA}"
+say "✅ claude-sync · contrato en vigor: ${VIGENTE}${CAMBIO}${NOTA}"
 exit 0

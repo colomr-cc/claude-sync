@@ -1,10 +1,10 @@
-# claude-config
+# claude-sync
 
 > **Spanish version:** [README_ES.md](README_ES.md)
 
-Multi-Device Claude Code configuration: the **work contract**
-that every AI session must follow, the **shared policy**, and the **orchestrator**
-that keeps all machines synchronized.
+## Multi-Device Claude Code Synchronizer
+
+The **work contract** that every AI session must follow, the **shared policy**, and the **orchestrator** that keeps all machines synchronized.
 
 **Design principle:** instructions are ink (the model follows them probabilistically);
 gates are cement (the program enforces them). This repo provides both layers:
@@ -43,15 +43,15 @@ wins on keys it manages, and per-machine state never travels between machines.
 ### New machine (or existing — repo wins on what it manages)
 
 ```bash
-git clone git@github.com:colomr-cc/claude-config.git ~/dev/claude-config
-~/dev/claude-config/install.sh
+git clone git@github.com:colomr-cc/claude-sync.git ~/dev/claude-sync
+~/dev/claude-sync/install.sh
 ```
 
 Done. The next Claude Code session on that machine starts with the contract
 loaded and sync automatically active. If there was a prior `~/.claude/CLAUDE.md`,
 it's replaced with the approved copy; unmanaged local keys in `settings.json` are preserved.
 
-**Requirement:** the path must be `~/dev/claude-config` (the hook references it).
+**Requirement:** the path must be `~/dev/claude-sync` (the hook references it).
 
 ### Updating the contract or policy
 
@@ -70,13 +70,13 @@ contract requires Claude to reproduce that line at the start of its first respon
 only way the status reaches my eyes. Silence would be indistinguishable from "the
 hook didn't run":
 
-- **Success:** `✅ claude-config · contract in effect: <commit> (<date>)`. The commit
+- **Success:** `✅ claude-sync · contract in effect: <commit> (<date>)`. The commit
   identifies which version rules this machine: useful when returning to equipment that hasn't
   been used in a while.
 - **Contract updated:** the message adds it explicitly, with the command to see
-  the diff — `git -C ~/dev/claude-config log -p -1 origin/main -- CLAUDE.md`. No
+  the diff — `git -C ~/dev/claude-sync log -p -1 origin/main -- CLAUDE.md`. No
   contract change is applied silently.
-- **Problem:** `⚠️ claude-config: ...` with the cause (no access to `origin`, missing reference,
+- **Problem:** `⚠️ claude-sync: ...` with the cause (no access to `origin`, missing reference,
   unreadable policy). The sync doesn't break session startup: it reports and
   continues with the last valid config.
 - **No message:** the hook didn't run → check the installation on that machine.
