@@ -24,6 +24,9 @@ cd "$DIR" || { say "⚠️ claude-config: no existe $DIR — revisar la instalac
 NOTA=""
 if ! git fetch --quiet origin main 2>/dev/null; then
   NOTA=" · ⚠️ sin acceso a origin: se aplica la última referencia local"
+else
+  # Actualizar rama local main sin cambiar la rama actual
+  git branch -f main origin/main 2>/dev/null
 fi
 
 if ! git rev-parse --verify --quiet "$REF" >/dev/null; then
