@@ -29,7 +29,9 @@
 6. Claude crea el PR y pasa la URL. NUNCA aprueba ni mergea — revisar,
    aprobar y mergear es siempre del usuario (Gatekeeper humano).
 7. Avisar antes de cada commit. Nunca push directo a main.
-8. Commits: una línea, minúsculas, en español, concisos.
+8. Contenido público en inglés: commits, PRs, issue comments, README y GitHub
+   metadata (about, discussions) deben estar en inglés para alcanzar comunidades
+   open source. La comunicación interna en sesiones sigue siendo en español.
 
 ## Comunicación
 
