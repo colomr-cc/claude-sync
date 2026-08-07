@@ -48,9 +48,8 @@ git clone git@github.com:colomr-cc/claude-config.git ~/dev/claude-config
 ```
 
 Done. The next Claude Code session on that machine starts with the contract
-loaded and sync automatically active. If there was a prior `~/.claude/CLAUDE.md` (file
-or symlink from the older version), it's replaced with the approved copy; unmanaged local
-keys in `settings.json` are preserved.
+loaded and sync automatically active. If there was a prior `~/.claude/CLAUDE.md`,
+it's replaced with the approved copy; unmanaged local keys in `settings.json` are preserved.
 
 **Requirement:** the path must be `~/dev/claude-config` (the hook references it).
 

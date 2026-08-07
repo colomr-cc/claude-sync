@@ -33,12 +33,7 @@ fi
 
 # 2. Materializar el contrato aprobado si difiere del que hay en ~/.claude
 ACTUAL=""
-MIGRACION=""
-if [[ -L "$CONTRATO" ]]; then
-  # Symlink de la versión anterior: el contrato dependía del árbol de trabajo.
-  # Se materializa siempre, aunque el contenido apuntado coincida.
-  MIGRACION=" (materializado: ya no es un enlace al árbol de trabajo)"
-elif [[ -f "$CONTRATO" ]]; then
+if [[ -f "$CONTRATO" ]]; then
   ACTUAL="$(git hash-object "$CONTRATO")"
 fi
 APROBADO="$(git rev-parse "$REF:CLAUDE.md" 2>/dev/null)"
@@ -56,12 +51,8 @@ if [[ "$ACTUAL" != "$APROBADO" ]]; then
     say "⚠️ claude-config: no se pudo extraer el contrato de $REF"
     exit 0
   fi
-  mv -f "$TMP" "$CONTRATO"   # sustituye también un symlink antiguo
-  if [[ -n "$MIGRACION" ]]; then
-    CAMBIO=" · contrato${MIGRACION}"
-  else
-    CAMBIO=" · contrato ACTUALIZADO — ver cambios: git -C $DIR log -p -1 $REF -- CLAUDE.md"
-  fi
+  mv -f "$TMP" "$CONTRATO"
+  CAMBIO=" · contrato ACTUALIZADO — ver cambios: git -C $DIR log -p -1 $REF -- CLAUDE.md"
 fi
 
 # 3. Aplicar la política aprobada al settings local
