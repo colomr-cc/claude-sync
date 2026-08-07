@@ -46,9 +46,8 @@ git clone git@github.com:colomr-cc/claude-config.git ~/dev/claude-config
 ```
 
 Listo. La siguiente sesión de Claude Code en esa máquina ya arranca con el contrato
-cargado y el sync automático activo. Si había un `~/.claude/CLAUDE.md` previo (fichero
-o enlace de la versión anterior), se sustituye por la copia aprobada; las claves locales
-no gestionadas de `settings.json` se conservan.
+cargado y el sync automático activo. Si había un `~/.claude/CLAUDE.md` previo,
+se sustituye por la copia aprobada; las claves locales no gestionadas de `settings.json` se conservan.
 
 **Requisito:** la ruta debe ser `~/dev/claude-config` (el hook la referencia).
 
