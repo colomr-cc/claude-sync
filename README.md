@@ -16,7 +16,7 @@ the contract as versioned ink, hooks and CI as cement.
 |---|---|---|---|
 | `CLAUDE.md` | The work contract (how I work, authorship, git, communication) | Claude Code at each session start, from the copy in `~/.claude/CLAUDE.md` | Only me, via PR |
 | `settings.shared.json` | Shared policy: no attribution + sync hook. **Never** contains per-machine state (`model`, `effortLevel`) — CI prevents it | `merge_settings.py` | Only me, via PR |
-| `sync.sh` | Orchestrator: runs at each session start (hook `SessionStart`). Fetches `origin/main` and materializes the contract and policy from there. Always speaks, on both channels — never dies silently | The SessionStart hook | Only me, via PR |
+| `sync.sh` | Orchestrator: runs at each session start (hook `SessionStart`). Fetches `origin/main`, keeps local `main` in sync, and materializes the contract and policy from there. Always speaks, on both channels — never dies silently | The SessionStart hook | Only me, via PR |
 | `merge_settings.py` | The merge logic: the repo WINS on keys it manages, unmanaged local state is preserved. Shallow merge by design. Reads policy from history (`git show origin/main:…`) and doesn't accept paths as arguments | `sync.sh` | Only me, via PR |
 | `install.sh` | Machine bootstrap: runs sync once, which materializes the contract and registers the hook. Idempotent | Me, once per machine | Only me, via PR |
 | `tests/` | Unit tests of the merge (the only real logic in the repo) | CI and pre-PR | With code that touches it |
