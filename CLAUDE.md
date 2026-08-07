@@ -45,3 +45,9 @@
     empezar reproduciendo esa línea tal cual, en cursiva, antes de nada más.
     Si no aparece ninguna línea del hook, decirlo igualmente: significa que esa
     máquina no tiene claude-sync instalado o el hook no se ejecutó.
+12. TRADUCCIÓN AUTOMÁTICA DE OUTPUTS. Los mensajes del hook SessionStart vienen
+    en inglés. Tradúcelos automáticamente al idioma en el que el usuario está
+    comunicándose en esa sesión. El usuario NO pide traducción explícita; es
+    automática. Si el usuario escribe en español, el mensaje aparece en español.
+    Si escribe en polaco, aparece en polaco. Esto aplica solo a outputs de hooks
+    del sistema, no a código ni respuestas normales.
