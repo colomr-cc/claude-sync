@@ -23,14 +23,14 @@ cd "$DIR" || { say "⚠️ claude-sync: no existe $DIR — revisar la instalaci�
 # 1. Traer la referencia aprobada. Sin red se sigue con la última conocida.
 NOTA=""
 if ! git fetch --quiet origin main 2>/dev/null; then
-  NOTA=" · ⚠️ sin acceso a origin: se aplica la última referencia local"
+  NOTA=" · ⚠️ no access to origin: using last known reference"
 else
   # Actualizar rama local main sin cambiar la rama actual
   git branch -f main origin/main 2>/dev/null
 fi
 
 if ! git rev-parse --verify --quiet "$REF" >/dev/null; then
-  say "⚠️ claude-sync: no existe la referencia $REF — revisar la instalación"
+  say "⚠️ claude-sync: reference $REF does not exist — check installation"
   exit 0
 fi
 
@@ -43,7 +43,7 @@ APROBADO="$(git rev-parse "$REF:CLAUDE.md" 2>/dev/null)"
 
 CAMBIO=""
 if [[ -z "$APROBADO" ]]; then
-  say "⚠️ claude-sync: no se encuentra CLAUDE.md en $REF"
+  say "⚠️ claude-sync: CLAUDE.md not found in $REF"
   exit 0
 fi
 if [[ "$ACTUAL" != "$APROBADO" ]]; then
@@ -51,20 +51,20 @@ if [[ "$ACTUAL" != "$APROBADO" ]]; then
   TMP="$(mktemp)"
   if ! git show "$REF:CLAUDE.md" > "$TMP"; then
     rm -f "$TMP"
-    say "⚠️ claude-sync: no se pudo extraer el contrato de $REF"
+    say "⚠️ claude-sync: failed to extract contract from $REF"
     exit 0
   fi
   mv -f "$TMP" "$CONTRATO"
-  CAMBIO=" · contrato ACTUALIZADO — ver cambios: git -C $DIR log -p -1 $REF -- CLAUDE.md"
+  CAMBIO=" · contract UPDATED — see changes: git -C $DIR log -p -1 $REF -- CLAUDE.md"
 fi
 
 # 3. Aplicar la política aprobada al settings local
 if ! python3 "$DIR/merge_settings.py"; then
-  say "⚠️ claude-sync: no se pudo aplicar la política — revisar settings.shared.json"
+  say "⚠️ claude-sync: failed to apply policy — check settings.shared.json"
   exit 0
 fi
 
 # 4. Confirmar en voz alta qué contrato rige en esta máquina
 VIGENTE="$(git log -1 --format='%h (%ad)' --date=short "$REF" -- CLAUDE.md settings.shared.json)"
-say "✅ claude-sync · contrato en vigor: ${VIGENTE}${CAMBIO}${NOTA}"
+say "✅ claude-sync · Contract-Id loaded: ${VIGENTE}${CAMBIO}${NOTA}"
 exit 0
