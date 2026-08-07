@@ -9,7 +9,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/dev/claude-sync/sync.sh",
+            "command": "${CLAUDE_SYNC_HOME:-~/dev/claude-sync}/sync.sh",
             "timeout": 30,
             "statusMessage": "Sincronizando configuración global..."
           }
