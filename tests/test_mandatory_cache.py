@@ -5,7 +5,7 @@ from pathlib import Path
 
 def extract_mandatory_from_file(file_path):
     """Extract MANDATORY CHECKLIST block from CLAUDE.md using sed."""
-    with open(file_path, 'r') as f:
+    with open(file_path) as f:
         content = f.read()
 
     start = content.find('## MANDATORY CHECKLIST')
