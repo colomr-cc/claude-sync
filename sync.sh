@@ -10,12 +10,18 @@ set -uo pipefail
 
 DIR="$(cd "$(dirname "$0")" && pwd)"
 CONTRATO="$HOME/.claude/CLAUDE.md"
+CACHE_STATE="$HOME/.claude/MANDATORY.cache"
 REF="origin/main"
 
 say() {
   local msg="$1"
   printf '{"systemMessage":"%s","hookSpecificOutput":{"hookEventName":"SessionStart","additionalContext":"%s"}}\n' "$msg" "$msg"
   return 0
+}
+
+extract_mandatory() {
+  local file="$1"
+  sed -n '/^## MANDATORY CHECKLIST$/,/^## [^M]/p' "$file" | head -n -1
 }
 
 cd "$DIR" || { say "⚠️ claude-sync: no existe $DIR — revisar la instalación"; exit 0; }
@@ -58,6 +64,21 @@ if [[ "$ACTUAL" != "$APROBADO" ]]; then
   CAMBIO=" · contract UPDATED — see changes: git -C $DIR log -p -1 $REF -- CLAUDE.md"
 fi
 
+# 2.5 Construir y verificar caché MANDATORY
+CACHE_ANTERIOR=""
+if [[ -f "$CACHE_STATE" ]]; then
+  CACHE_ANTERIOR="$(cat "$CACHE_STATE")"
+fi
+
+MANDATORY_ACTUAL="$(extract_mandatory "$CONTRATO")"
+CACHE_ACTUAL="$(echo "$MANDATORY_ACTUAL" | sha256sum | awk '{print $1}')"
+
+CACHE_CAMBIO=""
+if [[ "$CACHE_ANTERIOR" != "$CACHE_ACTUAL" ]]; then
+  echo "$CACHE_ACTUAL" > "$CACHE_STATE"
+  CACHE_CAMBIO=" · MANDATORY cache built"
+fi
+
 # 3. Aplicar la política aprobada al settings local
 if ! python3 "$DIR/merge_settings.py"; then
   say "⚠️ claude-sync: failed to apply policy — check settings.shared.json"
@@ -66,5 +87,5 @@ fi
 
 # 4. Confirmar en voz alta qué contrato rige en esta máquina
 VIGENTE="$(git log -1 --format='%h (%ad)' --date=short "$REF" -- CLAUDE.md settings.shared.json)"
-say "✅ claude-sync · Contract-Id loaded: ${VIGENTE}${CAMBIO}${NOTA}"
+say "✅ claude-sync · Contract-Id loaded: ${VIGENTE}${CAMBIO}${CACHE_CAMBIO}${NOTA}"
 exit 0
