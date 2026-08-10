@@ -1,5 +1,4 @@
 import hashlib
-import subprocess
 import tempfile
 from pathlib import Path
 
