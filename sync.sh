@@ -87,5 +87,6 @@ fi
 
 # 4. Confirmar en voz alta qué contrato rige en esta máquina
 VIGENTE="$(git log -1 --format='%h (%ad)' --date=short "$REF" -- CLAUDE.md settings.shared.json)"
-say "✅ claude-sync · Contract-Id loaded: ${VIGENTE}${CAMBIO}${CACHE_CAMBIO}${NOTA}"
+CACHE_HASH_SHORT="${CACHE_ACTUAL:0:6}"
+say "✅ claude-sync · Contract-Id loaded: ${VIGENTE} · cache **${CACHE_HASH_SHORT}${CAMBIO}${CACHE_CAMBIO}${NOTA}"
 exit 0
