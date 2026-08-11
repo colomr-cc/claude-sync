@@ -61,6 +61,7 @@
 
 10. CACHÉ MANDATORY. El modelo usa un bloque cacheado con las 3 reglas MANDATORY
     (arriba) en cada sesión. El caché se refresca en: nueva sesión (SessionStart),
-    comando `/clear` del usuario, o cambio en el contrato. Antes de enviar consulta
-    al API, el modelo verifica que el caché está activo. Se emite línea visual:
-    `🟢 cache` (en gris tenue) al inicio de cada respuesta.
+    comando `/clear` del usuario, o cambio en el contrato. El estado del caché se
+    comunica en la línea de Contract-Id que aparece al inicio de la sesión (ej:
+    `✅ claude-sync · Contract-Id loaded: d5c4bf6 (2026-08-10)`). No se repite en
+    respuestas posteriores.

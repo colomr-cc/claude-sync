@@ -19,6 +19,8 @@ the contract as versioned ink, hooks and CI as cement.
 | `sync.sh` | Orchestrator: runs at each session start (hook `SessionStart`). Fetches `origin/main`, keeps local `main` in sync, and materializes the contract and policy from there. Always speaks, on both channels — never dies silently | The SessionStart hook | Only me, via PR |
 | `merge_settings.py` | The merge logic: the repo WINS on keys it manages, unmanaged local state is preserved. Shallow merge by design. Reads policy from history (`git show origin/main:…`) and doesn't accept paths as arguments | `sync.sh` | Only me, via PR |
 | `install.sh` | Machine bootstrap: runs sync once, which materializes the contract and registers the hook. Idempotent | Me, once per machine | Only me, via PR |
+| `verify-cache.sh` | Cache verification: checks that the MANDATORY block in `~/.claude/CLAUDE.md` matches its stored hash in `~/.claude/MANDATORY.cache`. Used for cache validation at session start | The SessionStart hook, model initialization | Only `sync.sh` |
+| `~/.claude/MANDATORY.cache` | SHA256 hash of the MANDATORY CHECKLIST block; ensures the contract's critical rules are locked in and haven't drifted | `verify-cache.sh`, model context via prompt caching | Auto-built by `sync.sh` |
 | `tests/` | Unit tests of the merge (the only real logic in the repo) | CI and pre-PR | With code that touches it |
 
 ### What rules is what's APPROVED, not what's in the folder
@@ -37,6 +39,26 @@ with `git show`. It's not a symlink to the working tree, and that's why:
 `~/.claude/settings.json`, on the other hand, is **live state** that Claude Code writes (model,
 effort level, flags). That's why it's not replaced wholesale, but merged: the repo
 wins on keys it manages, and per-machine state never travels between machines.
+
+### MANDATORY Cache: Locking the contract into every session
+
+The MANDATORY CHECKLIST block (the three core rules) is cached at the start of each session
+via Anthropic's prompt caching. Here's how it works:
+
+1. **Build time** (`sync.sh` at SessionStart): Extract the MANDATORY block from the approved
+   contract, compute its SHA256 hash, and store it in `~/.claude/MANDATORY.cache`.
+2. **Verification** (optional `verify-cache.sh`): Check that the hash in the cache still
+   matches the current MANDATORY block — ensures no drift between sessions.
+3. **Session initialization** (model): Claude reads that the cache is active (via the Contract-Id
+   line in `additionalContext`), and the three rules are available in the prompt cache,
+   ensuring they're always present and consistent without re-transmitting.
+
+**Why?** The MANDATORY rules are the cement layer — they must not be forgotten, lost,
+or compromised by a stale contract. Caching ensures they're locked in, reduces latency,
+and saves tokens.
+
+**When the cache refreshes:** New SessionStart (via hook), explicit `/clear` command, or when
+the CLAUDE.md contract changes on the approved branch (`origin/main`).
 
 ## Onboarding
 
