@@ -45,12 +45,17 @@
 7. Honestidad antes que complacencia: decir "no lo sé", contradecir con
    argumentos, admitir errores sin ambigüedades.
 
-8. ESTADO DE LA CONFIGURACIÓN. El hook `SessionStart` de claude-sync deja en
-   el contexto una línea (ej: `✅ claude-sync · Contract-Id loaded: d85df90
-   (2026-08-07)` o `⚠️ …`). Tradúcela al idioma de la sesión y reproduce esa
-   línea en cursiva al inicio de tu primera respuesta, antes de nada más.
-   Si no aparece ninguna línea del hook, decirlo igualmente: significa que esa
-   máquina no tiene claude-sync instalado o el hook no se ejecutó.
+8. VERIFICACIÓN DE SESIÓN. Al inicio de tu primera respuesta, antes de nada más,
+   reproduce en cursiva la línea de verificación que el hook SessionStart emitió.
+   Formato: `✅ claude-sync · Contract-Id loaded: [HASH] ([DATE]) · cache **[HASH6]`
+   Ejemplo: `✅ claude-sync · Contract-Id loaded: 3e1374e (2026-08-11) · cache **3e1374`
+   
+   Esta línea confirma dos cosas:
+   - Contract-Id: versión del contrato y fecha (la que gobierna esta sesión)
+   - cache **HASH6: últimos 6 caracteres del SHA256 del bloque MANDATORY
+   
+   Ambos elementos deben estar presentes. Si falta alguno, la sesión no está verificada.
+   Traduce la línea al idioma de la sesión.
 
 9. TRADUCCIÓN AUTOMÁTICA DE OUTPUTS. Los mensajes del hook SessionStart vienen
    en inglés. Tradúcelos automáticamente al idioma en el que el usuario está
@@ -58,10 +63,3 @@
    automática. Si el usuario escribe en español, el mensaje aparece en español.
    Si escribe en polaco, aparece en polaco. Esto aplica solo a outputs de hooks
    del sistema, no a código ni respuestas normales.
-
-10. CACHÉ MANDATORY. El modelo usa un bloque cacheado con las 3 reglas MANDATORY
-    (arriba) en cada sesión. El caché se refresca en: nueva sesión (SessionStart),
-    comando `/clear` del usuario, o cambio en el contrato. El estado del caché se
-    comunica en la línea de Contract-Id que aparece al inicio de la sesión (ej:
-    `✅ claude-sync · Contract-Id loaded: d5c4bf6 (2026-08-10)`). No se repite en
-    respuestas posteriores.

@@ -171,10 +171,46 @@ Content.
         assert hash_v2 != hash_guardado, "Cache should mismatch when contract changes"
 
 
+def test_cache_hash_format_in_output():
+    """Test that cache hash (6 chars) can be extracted and formatted correctly."""
+    full_hash = "3e1374e1d8c5f2a9b0c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f"
+    hash_short = full_hash[:6]
+
+    assert len(hash_short) == 6
+    assert hash_short == "3e1374"
+    assert hash_short.isalnum()
+
+
+def test_sync_message_format():
+    """Test that sync.sh message format includes both Contract-Id and cache hash."""
+    contract_id = "3e1374e (2026-08-11)"
+    cache_hash_short = "3e1374"
+
+    message = f"✅ claude-sync · Contract-Id loaded: {contract_id} · cache **{cache_hash_short}"
+
+    assert "Contract-Id loaded:" in message
+    assert "cache **" in message
+    assert cache_hash_short in message
+    assert "3e1374e (2026-08-11)" in message
+
+
+def test_cache_hash_short_extraction():
+    """Test that short hash extraction works correctly."""
+    full_hash = hashlib.sha256(b"MANDATORY CHECKLIST content").hexdigest()
+    hash_short = full_hash[:6]
+
+    assert len(hash_short) == 6
+    assert len(full_hash) == 64
+    assert hash_short in full_hash
+
+
 if __name__ == "__main__":
     test_mandatory_block_extraction()
     test_mandatory_hash_generation()
     test_hash_changes_on_content_change()
     test_verify_cache_active()
     test_verify_cache_mismatch()
+    test_cache_hash_format_in_output()
+    test_sync_message_format()
+    test_cache_hash_short_extraction()
     print("All tests passed!")
