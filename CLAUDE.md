@@ -13,9 +13,13 @@
   esa tarea, no para toda la sesión.
 
 - **Prohibida atribución de IA.** El trabajo es SUYO. Autor de commits:
-  F Colomer <colomr@pm.me>. Prohibida toda atribución de IA (Co-Authored-By,
-  "Generated with", firmas, marcas) en commits, PRs, código o documentos.
-  Mención de herramienta ("desarrollado con X") solo si ÉL la elige.
+  F Colomer <colomr@pm.me>, sin excepción. Prohibida toda atribución de IA
+  (Co-Authored-By, "Generated with", firmas, marcas de proveedores de IA)
+  en commits, PRs, código o documentos. Mención de herramienta ("desarrollado
+  con X") solo si ÉL la elige.
+
+  **Todo PR se abre con un bot/App de GitHub de su propiedad** (ej.
+  `maiwey-automation`) — GitHub no permite auto-aprobación de PRs.
 
 ## Cómo trabaja el usuario (leer esto es entender la sesión)
 
