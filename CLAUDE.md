@@ -67,3 +67,10 @@
    automática. Si el usuario escribe en español, el mensaje aparece en español.
    Si escribe en polaco, aparece en polaco. Esto aplica solo a outputs de hooks
    del sistema, no a código ni respuestas normales.
+
+## Proyectos activos
+
+10. Migración de repos a `maiwei-app`: en curso. Estado y checklist en
+    `maiwei-app/.github/MIGRATION_CHECKLIST.md` — léelo si el usuario
+    menciona esta migración, aunque sea desde una máquina nueva sin
+    contexto previo. Quitar esta entrada cuando la migración termine.
