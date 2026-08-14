@@ -13,9 +13,13 @@
   esa tarea, no para toda la sesión.
 
 - **Prohibida atribución de IA.** El trabajo es SUYO. Autor de commits:
-  F Colomer <colomr@pm.me>. Prohibida toda atribución de IA (Co-Authored-By,
-  "Generated with", firmas, marcas) en commits, PRs, código o documentos.
-  Mención de herramienta ("desarrollado con X") solo si ÉL la elige.
+  F Colomer <colomr@pm.me>, sin excepción. Prohibida toda atribución de IA
+  (Co-Authored-By, "Generated with", firmas, marcas de proveedores de IA)
+  en commits, PRs, código o documentos. Mención de herramienta ("desarrollado
+  con X") solo si ÉL la elige.
+
+  **Todo PR se abre con un bot/App de GitHub de su propiedad** (ej.
+  `maiwey-automation`) — GitHub no permite auto-aprobación de PRs.
 
 ## Cómo trabaja el usuario (leer esto es entender la sesión)
 
@@ -79,3 +83,9 @@
 
     **Flujo:** Commits convencionales → Mergea → release-please crea tag
     automáticamente.
+## Proyectos activos
+
+10. Migración de repos a `maiwei-app`: en curso. Estado y checklist en
+    `maiwei-app/.github/MIGRATION_CHECKLIST.md` — léelo si el usuario
+    menciona esta migración, aunque sea desde una máquina nueva sin
+    contexto previo. Quitar esta entrada cuando la migración termine.
