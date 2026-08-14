@@ -68,6 +68,21 @@
    Si escribe en polaco, aparece en polaco. Esto aplica solo a outputs de hooks
    del sistema, no a código ni respuestas normales.
 
+## Versionado y Releases (maiwei-app organization)
+
+10. **Política SYSTEM-WIDE de versionado y releases:**
+    - Conventional commits obligatorio: `feat:`, `fix:`, `BREAKING CHANGE:`
+    - Commitlint valida formato en CI (falla merge si no cumple)
+    - Release automático: `google/release-please-action` detecta cambios y crea
+      tag sin intervención manual
+    - Semantic versioning: tags v1.2.3 (fija), v1 (última de serie), latest (global)
+    - Acciones pinneadas: solo tags sem-ver (@v4, @v4.2.1), NUNCA SHAs (@61a6322...)
+    - Linter anti-SHA en CI: rechaza workflows con SHAs
+    - Documentación extensa: Notion. Esta sección es compacta; referencia completa
+      en proyectos específicos y sesión donde se implementó.
+
+    **Flujo:** Commits convencionales → Mergea → release-please crea tag
+    automáticamente.
 ## Proyectos activos
 
 10. Migración de repos a `maiwei-app`: en curso. Estado y checklist en
